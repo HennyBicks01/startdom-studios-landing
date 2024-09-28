@@ -293,71 +293,71 @@ export default function LandingPage() {
       </AnimatedSection>
 
       <AnimatedSection id="contact" className="relative py-20 text-white">
-          <div className="container mx-auto px-4">
-            <h2 className="text-4xl font-bold mb-12 text-center">Get in Touch</h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="space-y-4">
-                <p className="text-lg">
-                  We'd love to hear from you! Whether you have a question about our services or want to start your
-                  journey to success, our team is ready to help.
-                </p>
-                {[
-                  { icon: Mail, text: "hello@startdomstudios.com" },
-                  { icon: Phone, text: "+1 (555) 123-4567" },
-                  { icon: MapPin, text: "123 Success Street, Enterprise City, 12345" }
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center space-x-2 text-gray-300">
-                    <item.icon className="h-5 w-5 text-orange-500" />
-                    <span>{item.text}</span>
-                  </div>
-                ))}
-              </div>
-              <Card className="bg-gray-800/50 backdrop-blur-sm border-none rounded-2xl">
-                <CardHeader>
-                  <CardTitle className="text-2xl font-semibold">Send us a message</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <form className="space-y-4">
-                    <Input placeholder="Your Name" className="bg-gray-700/50 border-gray-600 text-white rounded-1g" />
-                    <Input type="email" placeholder="Your Email" className="bg-gray-700/50 border-gray-600 text-white rounded-lg" />
-                    <Textarea placeholder="Your Message" className="bg-gray-700/50 border-gray-600 text-white rounded-lg" />
-                    <Button type="submit" className="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white transition-all duration-300 transform hover:scale-105 rounded-lg">
-                      Send Message
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-      </AnimatedSection>
-
-
-      <footer className="relative py-6 text-white">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="mb-4 md:mb-0">
-              <Link href="#" className="flex items-center">
-                <Rocket className="h-6 w-6 text-orange-500 mr-2" />
-                <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-pink-500">
-                  Startdom Studios
-                </span>
-              </Link>
-              <p className="mt-2 text-sm text-gray-400">Empowering success, one dream at a time.</p>
+          <h2 className="text-4xl font-bold mb-12 text-center">Get in Touch</h2>
+          <div className="grid md:grid-cols-2 gap-8 mb-16">
+            <div className="space-y-4">
+              <p className="text-lg">
+                We'd love to hear from you! Whether you have a question about our services or want to start your
+                journey to success, our team is ready to help.
+              </p>
+              {[
+                { icon: Mail, text: "hello@startdomstudios.com" },
+                { icon: Phone, text: "+1 (555) 123-4567" },
+                { icon: MapPin, text: "123 Success Street, Enterprise City, 12345" }
+              ].map((item, index) => (
+                <div key={index} className="flex items-center space-x-2 text-gray-300">
+                  <item.icon className="h-5 w-5 text-orange-500" />
+                  <span>{item.text}</span>
+                </div>
+              ))}
             </div>
-            <div className="flex space-x-4">
-              <Link className="text-sm hover:text-orange-500 transition-colors" href="#">
-                Terms of Service
-              </Link>
-              <Link className="text-sm hover:text-orange-500 transition-colors" href="#">
-                Privacy Policy
-              </Link>
+            <Card className="bg-gray-800/50 backdrop-blur-sm border-none rounded-2xl">
+              <CardHeader>
+                <CardTitle className="text-2xl font-semibold">Send us a message</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form className="space-y-4">
+                  <Input placeholder="Your Name" className="bg-gray-700/50 border-gray-600 text-white rounded-1g" />
+                  <Input type="email" placeholder="Your Email" className="bg-gray-700/50 border-gray-600 text-white rounded-lg" />
+                  <Textarea placeholder="Your Message" className="bg-gray-700/50 border-gray-600 text-white rounded-lg" />
+                  <Button type="submit" className="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white transition-all duration-300 transform hover:scale-105 rounded-lg">
+                    Send Message
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+          
+          {/* Footer */}
+          <footer className="relative py-6 text-white border-t border-gray-800">
+            <div className="container mx-auto px-4">
+              <div className="flex flex-col md:flex-row justify-between items-center">
+                <div className="mb-4 md:mb-0">
+                  <Link href="#" className="flex items-center">
+                    <Rocket className="h-6 w-6 text-orange-500 mr-2" />
+                    <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-pink-500">
+                      Startdom Studios
+                    </span>
+                  </Link>
+                  <p className="mt-2 text-sm text-gray-400">Empowering success, one dream at a time.</p>
+                </div>
+                <div className="flex space-x-4">
+                  <Link className="text-sm hover:text-orange-500 transition-colors" href="#">
+                    Terms of Service
+                  </Link>
+                  <Link className="text-sm hover:text-orange-500 transition-colors" href="#">
+                    Privacy Policy
+                  </Link>
+                </div>
+              </div>
+              <div className="mt-6 text-center text-sm text-gray-400">
+                © 2024 Startdom Studios. All rights reserved.
+              </div>
             </div>
-          </div>
-          <div className="mt-6 text-center text-sm text-gray-400">
-            © 2024 Startdom Studios. All rights reserved.
-          </div>
+          </footer>
         </div>
-      </footer>
+      </AnimatedSection>
     </div>
   )
 }
