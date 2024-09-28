@@ -18,15 +18,24 @@ interface Star {
 
 const AnimatedSection = ({ children, className }: { children: React.ReactNode, className?: string }) => {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, amount: 0.2 })
+  const isInView = useInView(ref, { 
+    amount: 0.5,
+    once: false
+  })
+
+  useEffect(() => {
+    if (isInView && ref.current) {
+      (ref.current as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }, [isInView])
 
   return (
     <motion.section
       ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      className={className}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: isInView ? 1 : 0 }}
+      transition={{ duration: 0.5 }}
+      className={`min-h-screen flex items-center ${className}`}
     >
       {children}
     </motion.section>
@@ -258,16 +267,16 @@ export default function LandingPage() {
           <h2 className="text-4xl font-bold mb-12 text-center">Meet Our Team</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { name: "Alex Johnson", role: "Strategy Expert", image: "/person1.gif" },
-              { name: "Sam Lee", role: "Performance Guru", image: "/person2.gif" },
+              { name: "Kamala Harris", role: "Strategy Expert", image: "/person1.gif" },
+              { name: "Donald Trump", role: "Performance Guru", image: "/person2.gif" },
               { name: "Taylor Swift", role: "Leadership Coach", image: "/person3.gif" }
             ].map((member, index) => (
               <div key={index} className="group">
-                <div className="relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 transform group-hover:scale-105">
+                <div className="relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 transform group-hover:scale-105 aspect-square">
                   <img
                     src={member.image}
                     alt={member.name}
-                    className="w-full h-auto object-cover"
+                    className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <div className="absolute bottom-4 left-4 right-4 text-white">
@@ -282,8 +291,7 @@ export default function LandingPage() {
         </div>
       </AnimatedSection>
 
-      <AnimatedSection>
-        <section className="relative py-20 text-white">
+      <AnimatedSection className="relative py-20 text-white">
           <div className="container mx-auto px-4">
             <h2 className="text-4xl font-bold mb-12 text-center">Get in Touch</h2>
             <div className="grid md:grid-cols-2 gap-8">
@@ -320,7 +328,6 @@ export default function LandingPage() {
               </Card>
             </div>
           </div>
-        </section>
       </AnimatedSection>
 
 
