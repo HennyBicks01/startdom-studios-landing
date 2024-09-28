@@ -213,9 +213,11 @@ export default function LandingPage() {
 
       <AnimatedSection className="relative py-20 text-white" id="about">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold mb-8 text-center">About Startdom Studios</h2>
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
+              <h2 className="text-5xl font-bold mb-12 bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-pink-500">
+                About Us
+              </h2>
               <p className="text-lg mb-6">
                 At Startdom Studios, we're not just consultants – we're your partners in success. With a passion for
                 innovation and a commitment to excellence, we help turn your boldest aspirations into remarkable
@@ -265,7 +267,9 @@ export default function LandingPage() {
 
       <AnimatedSection id="team" className="relative py-20 text-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold mb-12 text-center">Meet Our Team</h2>
+          <h2 className="text-5xl font-bold mb-12 bg-clip-text text-center text-transparent bg-gradient-to-r from-orange-500 to-pink-500">
+            Our Team
+          </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
               { name: "Kamala Harris", role: "Strategy Expert", image: "/person1.gif" },
@@ -340,7 +344,7 @@ export default function LandingPage() {
                       Startdom Studios
                     </span>
                   </Link>
-                  <p className="mt-2 text-sm text-gray-400">Empowering success, one dream at a time.</p>
+                  <p className="mt-2 text-sm text-gray-400">Empowering success, one start at a time.</p>
                 </div>
                 <div className="flex space-x-4">
                   <Link className="text-sm hover:text-orange-500 transition-colors" href="#">
