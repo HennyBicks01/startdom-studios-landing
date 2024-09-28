@@ -82,7 +82,7 @@ const StarryBackground = () => {
     </motion.div>
   )
 }
-
+/*
 
 interface NoiseBlobProps {
   top: number;
@@ -103,10 +103,12 @@ const NoiseBlob = ({ top, left, size, color }: NoiseBlobProps) => (
     }}
   />
 )
+*/
 
 const useScrollDirection = () => {
   const [scrollDirection, setScrollDirection] = useState("up")
   const [prevOffset, setPrevOffset] = useState(0)
+  const [isHeaderClicked, setIsHeaderClicked] = useState(false)
 
   const toggleScrollDirection = () => {
     const scrollY = window.pageYOffset
@@ -125,22 +127,25 @@ const useScrollDirection = () => {
     }
   }, [prevOffset])
 
-  return scrollDirection
+  return { scrollDirection, isHeaderClicked, setIsHeaderClicked }
 }
 
 export default function LandingPage() {
   const { scrollY } = useScroll()
   const y = useTransform(scrollY, [0, 300], [0, -100])
   const opacity = useTransform(scrollY, [0, 300], [1, 0])
-  const scrollDirection = useScrollDirection()
+  const { scrollDirection, isHeaderClicked, setIsHeaderClicked } = useScrollDirection()
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-black via-gray-900 to-black relative overflow-hidden">
       <StarryBackground />
 
-      <header className={`fixed top-0 left-0 right-0 z-50 px-4 py-4 lg:px-6 transition-all duration-300 ${
-        scrollDirection === "up" ? "translate-y-0 backdrop-blur-md bg-gray-900/30" : "-translate-y-full"
-      }`}>
+      <header 
+        className={`fixed top-0 left-0 right-0 z-50 px-4 py-4 lg:px-6 transition-all duration-300 ${
+          scrollDirection === "up" || isHeaderClicked ? "translate-y-0 backdrop-blur-md bg-gray-900/30" : "-translate-y-full"
+        }`}
+        onClick={() => setIsHeaderClicked(true)}
+      >
         <div className="container mx-auto flex items-center justify-between">
           <Link className="flex items-center justify-center" href="#">
             <Rocket className="h-8 w-8 text-orange-500 mr-2" />
@@ -219,13 +224,13 @@ export default function LandingPage() {
                 About Us
               </h2>
               <p className="text-lg mb-6">
-                At Startdom Studios, we're not just consultants – we're your partners in success. With a passion for
+                At Startdom Studios, we&apos;re not just consultants – we&apos;re your partners in success. With a passion for
                 innovation and a commitment to excellence, we help turn your boldest aspirations into remarkable
                 achievements.
               </p>
               <p className="text-lg">
                 Our unique approach combines cutting-edge strategies with personalized guidance, ensuring that every
-                client receives the tailored support they need to thrive in today's dynamic business landscape.
+                client receives the tailored support they need to thrive in today&apos;s dynamic business landscape.
               </p>
             </div>
             <div className="relative">
@@ -302,7 +307,7 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-2 gap-8 mb-16">
             <div className="space-y-4">
               <p className="text-lg">
-                We'd love to hear from you! Whether you have a question about our services or want to start your
+                We&apos;d love to hear from you! Whether you have a question about our services or want to start your
                 journey to success, our team is ready to help.
               </p>
               {[
