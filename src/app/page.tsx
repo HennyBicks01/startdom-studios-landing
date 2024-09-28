@@ -33,28 +33,34 @@ const AnimatedSection = ({ children, className }: { children: React.ReactNode, c
   )
 }
 
-const StarryBackground = ({ extend = false }) => {
+const StarryBackground = () => {
   const [stars, setStars] = useState<Star[]>([])
+  const { scrollY } = useScroll()
 
   useEffect(() => {
     const generateStars = () => {
       const newStars: Star[] = []
-      for (let i = 0; i < 900; i++) { // Increased from 200 to 500
+      for (let i = 0; i < 300; i++) {
         newStars.push({
           left: `${Math.random() * 100}%`,
-          top: `${Math.random() * (extend ? 300 : 100)}%`,
-          size: Math.random() * 2 + 0.5, // Slightly smaller stars
-          animationDuration: `${Math.random() * 3 + 1}s`,
+          top: `${Math.random() * 100}%`,
+          size: Math.random() * 2 + 0.5,
+          animationDuration: `${Math.random() * 3 + 2}s`,
         })
       }
       setStars(newStars)
     }
 
     generateStars()
-  }, [extend])
+  }, [])
+
+  const y = useTransform(scrollY, [0, 500], [0, 50])  // Adjust these values to control parallax intensity
 
   return (
-    <div className={`absolute inset-0 ${extend ? 'h-[300vh]' : ''} overflow-hidden pointer-events-none z-0`}>
+    <motion.div 
+      className="absolute inset-0 pointer-events-none z-0"
+      style={{ y }}
+    >
       {stars.map((star, index) => (
         <div
           key={index}
@@ -64,14 +70,15 @@ const StarryBackground = ({ extend = false }) => {
             top: star.top,
             width: `${star.size}px`,
             height: `${star.size}px`,
-            opacity: Math.random() * 0.7 + 0.3, // Slightly dimmer stars
+            opacity: Math.random() * 0.7 + 0.3,
             animation: `twinkle ${star.animationDuration} infinite alternate`,
           }}
         />
       ))}
-    </div>
+    </motion.div>
   )
 }
+
 
 interface NoiseBlobProps {
   top: number;
@@ -93,17 +100,43 @@ const NoiseBlob = ({ top, left, size, color }: NoiseBlobProps) => (
   />
 )
 
+const useScrollDirection = () => {
+  const [scrollDirection, setScrollDirection] = useState("up")
+  const [prevOffset, setPrevOffset] = useState(0)
+
+  const toggleScrollDirection = () => {
+    const scrollY = window.pageYOffset
+    if (scrollY > prevOffset) {
+      setScrollDirection("down")
+    } else if (scrollY < prevOffset) {
+      setScrollDirection("up")
+    }
+    setPrevOffset(scrollY)
+  }
+
+  useEffect(() => {
+    window.addEventListener("scroll", toggleScrollDirection)
+    return () => {
+      window.removeEventListener("scroll", toggleScrollDirection)
+    }
+  }, [prevOffset])
+
+  return scrollDirection
+}
+
 export default function LandingPage() {
   const { scrollY } = useScroll()
   const y = useTransform(scrollY, [0, 300], [0, -100])
   const opacity = useTransform(scrollY, [0, 300], [1, 0])
+  const scrollDirection = useScrollDirection()
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
-      <StarryBackground extend={true} />
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-black via-gray-900 to-black relative overflow-hidden">
+      <StarryBackground />
 
-
-      <header className="fixed top-0 left-0 right-0 z-50 px-4 py-4 lg:px-6 backdrop-blur-md bg-gray-900/50">
+      <header className={`fixed top-0 left-0 right-0 z-50 px-4 py-4 lg:px-6 transition-all duration-300 ${
+        scrollDirection === "up" ? "translate-y-0 backdrop-blur-md bg-gray-900/30" : "-translate-y-full"
+      }`}>
         <div className="container mx-auto flex items-center justify-between">
           <Link className="flex items-center justify-center" href="#">
             <Rocket className="h-8 w-8 text-orange-500 mr-2" />
@@ -184,11 +217,11 @@ export default function LandingPage() {
               </p>
             </div>
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-500 to-pink-500 rounded-lg transform rotate-3"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-500 to-pink-500 rounded-2xl transform rotate-3"></div>
               <img
-                src="/placeholder.svg?height=400&width=600"
+                src="/team.gif"
                 alt="Team collaboration"
-                className="relative z-10 rounded-lg shadow-2xl"
+                className="relative z-10 rounded-2xl shadow-2xl w-full h-auto"
               />
             </div>
           </div>
@@ -204,7 +237,7 @@ export default function LandingPage() {
               { icon: Target, title: "Performance Optimization", description: "Streamline operations and maximize efficiency." },
               { icon: Users, title: "Leadership Development", description: "Cultivate strong leaders to drive success at every level." }
             ].map((service, index) => (
-              <Card key={index} className="bg-gray-800/50 backdrop-blur-sm border-none hover:bg-gray-700/50 transition-colors duration-300">
+              <Card key={index} className="bg-gray-800/50 backdrop-blur-sm border-none hover:bg-gray-700/50 transition-all duration-300 rounded-2xl">
                 <CardHeader>
                   <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-orange-500 to-pink-500 rounded-full flex items-center justify-center">
                     <service.icon className="h-8 w-8 text-white" />
@@ -225,14 +258,14 @@ export default function LandingPage() {
           <h2 className="text-4xl font-bold mb-12 text-center">Meet Our Team</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { name: "Alex Johnson", role: "Strategy Expert" },
-              { name: "Sam Lee", role: "Performance Guru" },
-              { name: "Taylor Swift", role: "Leadership Coach" }
+              { name: "Alex Johnson", role: "Strategy Expert", image: "/person1.gif" },
+              { name: "Sam Lee", role: "Performance Guru", image: "/person2.gif" },
+              { name: "Taylor Swift", role: "Leadership Coach", image: "/person3.gif" }
             ].map((member, index) => (
               <div key={index} className="group">
-                <div className="relative overflow-hidden rounded-lg shadow-lg transition-all duration-300 transform group-hover:scale-105">
+                <div className="relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 transform group-hover:scale-105">
                   <img
-                    src={`/placeholder.svg?height=400&width=300&text=${member.name}`}
+                    src={member.image}
                     alt={member.name}
                     className="w-full h-auto object-cover"
                   />
@@ -249,44 +282,47 @@ export default function LandingPage() {
         </div>
       </AnimatedSection>
 
-      <AnimatedSection className="relative py-20 text-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold mb-12 text-center">Get in Touch</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <p className="text-lg">
-                We'd love to hear from you! Whether you have a question about our services or want to start your
-                journey to success, our team is ready to help.
-              </p>
-              {[
-                { icon: Mail, text: "hello@startdomstudios.com" },
-                { icon: Phone, text: "+1 (555) 123-4567" },
-                { icon: MapPin, text: "123 Success Street, Enterprise City, 12345" }
-              ].map((item, index) => (
-                <div key={index} className="flex items-center space-x-2 text-gray-300">
-                  <item.icon className="h-5 w-5 text-orange-500" />
-                  <span>{item.text}</span>
-                </div>
-              ))}
+      <AnimatedSection>
+        <section className="relative py-20 text-white">
+          <div className="container mx-auto px-4">
+            <h2 className="text-4xl font-bold mb-12 text-center">Get in Touch</h2>
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="space-y-4">
+                <p className="text-lg">
+                  We'd love to hear from you! Whether you have a question about our services or want to start your
+                  journey to success, our team is ready to help.
+                </p>
+                {[
+                  { icon: Mail, text: "hello@startdomstudios.com" },
+                  { icon: Phone, text: "+1 (555) 123-4567" },
+                  { icon: MapPin, text: "123 Success Street, Enterprise City, 12345" }
+                ].map((item, index) => (
+                  <div key={index} className="flex items-center space-x-2 text-gray-300">
+                    <item.icon className="h-5 w-5 text-orange-500" />
+                    <span>{item.text}</span>
+                  </div>
+                ))}
+              </div>
+              <Card className="bg-gray-800/50 backdrop-blur-sm border-none rounded-2xl">
+                <CardHeader>
+                  <CardTitle className="text-2xl font-semibold">Send us a message</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <form className="space-y-4">
+                    <Input placeholder="Your Name" className="bg-gray-700/50 border-gray-600 text-white rounded-1g" />
+                    <Input type="email" placeholder="Your Email" className="bg-gray-700/50 border-gray-600 text-white rounded-lg" />
+                    <Textarea placeholder="Your Message" className="bg-gray-700/50 border-gray-600 text-white rounded-lg" />
+                    <Button type="submit" className="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white transition-all duration-300 transform hover:scale-105 rounded-lg">
+                      Send Message
+                    </Button>
+                  </form>
+                </CardContent>
+              </Card>
             </div>
-            <Card className="bg-gray-800/50 backdrop-blur-sm border-none">
-              <CardHeader>
-                <CardTitle className="text-2xl font-semibold">Send us a message</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <form className="space-y-4">
-                  <Input placeholder="Your Name" className="bg-gray-700/50 border-gray-600 text-white" />
-                  <Input type="email" placeholder="Your Email" className="bg-gray-700/50 border-gray-600 text-white" />
-                  <Textarea placeholder="Your Message" className="bg-gray-700/50 border-gray-600 text-white" />
-                  <Button type="submit" className="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white transition-all duration-300 transform hover:scale-105">
-                    Send Message
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
           </div>
-        </div>
+        </section>
       </AnimatedSection>
+
 
       <footer className="relative py-6 text-white">
         <div className="container mx-auto px-4">
