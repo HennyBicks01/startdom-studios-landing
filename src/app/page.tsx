@@ -16,22 +16,17 @@ interface Star {
   animationDuration: string;
 }
 
-const AnimatedSection = ({ children, className }: { children: React.ReactNode, className?: string }) => {
+const AnimatedSection = ({ children, className, id }: { children: React.ReactNode, className?: string, id?: string }) => {
   const ref = useRef(null)
   const isInView = useInView(ref, { 
     amount: 0.5,
     once: false
   })
 
-  useEffect(() => {
-    if (isInView && ref.current) {
-      (ref.current as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'center' })
-    }
-  }, [isInView])
-
   return (
     <motion.section
       ref={ref}
+      id={id}
       initial={{ opacity: 0 }}
       animate={{ opacity: isInView ? 1 : 0 }}
       transition={{ duration: 0.5 }}
@@ -159,6 +154,12 @@ export default function LandingPage() {
                 key={item}
                 className="text-sm font-medium text-gray-300 hover:text-white transition-colors"
                 href={`#${item.toLowerCase()}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById(item.toLowerCase())?.scrollIntoView({
+                    behavior: 'smooth'
+                  });
+                }}
               >
                 {item}
               </Link>
@@ -210,7 +211,7 @@ export default function LandingPage() {
         </div>
       </motion.section>
 
-      <AnimatedSection className="relative py-20 text-white">
+      <AnimatedSection className="relative py-20 text-white" id="about">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold mb-8 text-center">About Startdom Studios</h2>
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -237,7 +238,7 @@ export default function LandingPage() {
         </div>
       </AnimatedSection>
 
-      <AnimatedSection className="relative py-20 text-white">
+      <AnimatedSection id="services" className="relative py-20 text-white">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold mb-12 text-center">Our Services</h2>
           <div className="grid md:grid-cols-3 gap-8">
@@ -262,7 +263,7 @@ export default function LandingPage() {
         </div>
       </AnimatedSection>
 
-      <AnimatedSection className="relative py-20 text-white">
+      <AnimatedSection id="team" className="relative py-20 text-white">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold mb-12 text-center">Meet Our Team</h2>
           <div className="grid md:grid-cols-3 gap-8">
@@ -291,7 +292,7 @@ export default function LandingPage() {
         </div>
       </AnimatedSection>
 
-      <AnimatedSection className="relative py-20 text-white">
+      <AnimatedSection id="contact" className="relative py-20 text-white">
           <div className="container mx-auto px-4">
             <h2 className="text-4xl font-bold mb-12 text-center">Get in Touch</h2>
             <div className="grid md:grid-cols-2 gap-8">
